@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AH Study | Learn Better</title>
+<style>
+:root{--navy:#14234b;--blue:#2858c7;--pale:#edf3ff;--ink:#17233d;--muted:#6e7890;--line:#e6ebf4}
+*{box-sizing:border-box}body{margin:0;background:#f5f7fc;color:var(--ink);font-family:Arial, sans-serif}
+header{background:linear-gradient(135deg,#101b3c,#2858c7);color:#fff;padding:19px 17px 24px;border-radius:0 0 24px 24px}
+.wrap{max-width:900px;margin:auto}.brandrow{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:14px;background:#fff;color:#204ba9;display:grid;place-items:center;font-weight:900;font-size:17px}.brand{font-size:23px;font-weight:800}.tag{font-size:11px;letter-spacing:1px;opacity:.8;margin-top:4px}
+.searchrow{display:flex;gap:7px;margin-top:18px}.searchrow input{flex:1;min-width:0;border:0;border-radius:11px;padding:13px;font-size:14px}.searchrow button,.btn{border:0;background:#2858c7;color:white;border-radius:10px;padding:12px 15px;font-weight:700;cursor:pointer}
+main{max-width:900px;margin:auto;padding:20px 15px 92px}.page{display:none}.page.active{display:block}
+h1{font-size:23px;margin:3px 0 7px}.muted{color:var(--muted);font-size:13px;line-height:1.5}.sectionhead{font-size:17px;font-weight:800;margin:23px 0 12px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 5px 18px #15254b08}
+.hero{background:var(--pale);border:1px solid #dce7ff;border-radius:16px;padding:17px;margin:17px 0}.hero strong{font-size:17px}.hero p{margin:7px 0 13px;color:#566582;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.tile{cursor:pointer}.tile .emoji{font-size:25px}.tile b{display:block;margin:8px 0 4px}.tile small{color:var(--muted)}
+.row{display:flex;gap:12px;align-items:center}.row+.row{margin-top:10px}.badge{font-size:11px;background:#edf3ff;color:#2452b2;padding:5px 8px;border-radius:20px;font-weight:700}
+select,input[type=text]{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px;margin:7px 0 12px}
+label{font-size:13px;font-weight:700}.lesson{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:9px 0}.lesson .btn{padding:9px 12px;font-size:12px;white-space:nowrap}
+.question{font-weight:700;line-height:1.5;margin:14px 0}.option{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;margin:8px 0;cursor:pointer}.option:focus,.option:hover{border-color:#2858c7;background:#f4f7ff}
+.feedback{font-weight:700;margin-top:12px;min-height:20px}.note{background:#fff8e8;border:1px solid #f4e4b8;border-radius:12px;padding:12px;font-size:12px;color:#76591c;margin-top:15px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 2px calc(10px + env(safe-area-inset-bottom));z-index:5}
+nav button{border:0;background:none;color:#748099;font-size:11px;font-weight:700;min-width:58px;cursor:pointer}nav button.active{color:#2858c7}
+.empty{padding:18px;text-align:center;color:var(--muted)}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style></head>
+<body>
+<header><div class="wrap">
+ <div class="brandrow"><div class="logo">AH</div><div><div class="brand">AH Study</div><div class="tag">LEARN • PRACTICE • ACHIEVE</div></div></div>
+ <div class="searchrow"><input id="search" type="text" placeholder="Search subjects, courses or lessons"><button onclick="doSearch()">Search</button></div>
+</div></header>
+<main>
+<section id="home" class="page active">
+ <h1>Welcome to AH Study</h1><div class="muted">A learning platform made only for education.</div>
+ <div class="hero"><strong>Learn at your own pace 📘</strong><p>Choose your class and board to explore your study resources.</p><button class="btn" onclick="go('courses')">Explore Courses</button></div>
+ <div class="sectionhead">Choose your class</div>
+ <div class="grid" id="classGrid"></div>
+ <div class="sectionhead">Learning categories</div>
+ <div class="grid">
+  <div class="panel tile" onclick="go('courses')"><div class="emoji">🎥</div><b>Video Lessons</b><small class="muted">Educational lectures</small></div>
+  <div class="panel tile" onclick="go('tests')"><div class="emoji">📝</div><b>Tests & Quizzes</b><small class="muted">Check your learning</small></div>
+  <div class="panel tile" onclick="go('notes')"><div class="emoji">📄</div><b>Notes</b><small class="muted">Revision material</small></div>
+  <div class="panel tile" onclick="go('courses')"><div class="emoji">🏆</div><b>Olympiad</b><small class="muted">NSO & IMO practice</small></div>
+ </div>
+ <div class="note">Demo version: course titles and sample quiz are included. Real video lessons, downloadable notes and student accounts must be connected to trusted educational content and a secure server.</div>
+</section>
+
+<section id="courses" class="page">
+ <h1>Courses & Subjects</h1><p class="muted">Select a board, class and subject.</p>
+ <div class="panel">
+  <label for="board">Board</label><select id="board"><option>CBSE</option><option>ICSE</option><option>UP Board</option><option>Other Board</option></select>
+  <label for="classSelect">Class</label><select id="classSelect"></select>
+ </div>
+ <div class="sectionhead">Subjects</div><div class="grid" id="subjectGrid"></div>
+ <div class="sectionhead">Sample lessons</div><div id="lessonList"></div>
+</section>
+
+<section id="tests" class="page">
+ <h1>Practice Tests</h1><p class="muted">Try this sample science question.</p>
+ <div class="panel">
+  <div class="badge">SCIENCE • SAMPLE MCQ</div>
+  <div class="question">Which instrument is used to measure atmospheric pressure?</div>
+  <button class="option" onclick="answer(this,false)">A. Thermometer</button>
+  <button class="option" onclick="answer(this,true)">B. Barometer</button>
+  <button class="option" onclick="answer(this,false)">C. Ammeter</button>
+  <button class="option" onclick="answer(this,false)">D. Speedometer</button>
+  <div class="feedback" id="feedback"></div>
+  <button class="btn" style="margin-top:12px" onclick="resetQuiz()">Try again</button>
+ </div>
+ <div class="sectionhead">More practice</div><div class="panel"><b>Coming next</b><p class="muted">Chapter-wise tests, timed quizzes, answer explanations and progress tracking.</p></div>
+</section>
+
+<section id="notes" class="page">
+ <h1>Study Notes</h1><p class="muted">Organised revision material for school subjects.</p>
+ <div class="panel lesson"><div><b>Physics notes</b><div class="muted">Definitions, formulas and concepts</div></div><span class="badge">Coming soon</span></div>
+ <div class="panel lesson"><div><b>Chemistry notes</b><div class="muted">Reactions and important terms</div></div><span class="badge">Coming soon</span></div>
+ <div class="panel lesson"><div><b>Mathematics formula sheet</b><div class="muted">Key formulas and examples</div></div><span class="badge">Coming soon</span></div>
+ <div class="note">Only verified, age-appropriate educational materials should be added to the published app.</div>
+</section>
+
+<section id="profile" class="page">
+ <h1>Student Learning</h1><p class="muted">Choose your study preferences on this device.</p>
+ <div class="panel"><label for="studentClass">Your class</label><select id="studentClass"></select><label for="studentBoard">Your board</label><select id="studentBoard"><option>CBSE</option><option>ICSE</option><option>UP Board</option><option>Other Board</option></select><button class="btn" onclick="savePrefs()">Save preferences</button><p id="saved" class="muted"></p></div>
+ <div class="sectionhead">About AH Study</div><div class="panel"><b>Education first.</b><p class="muted">AH Study is designed for lessons, practice, revision and academic progress.</p></div>
+</section>
+</main>
+<nav>
+ <button class="active" onclick="go('home',this)">⌂<br>Home</button>
+ <button onclick="go('courses',this)">▦<br>Courses</button>
+ <button onclick="go('tests',this)">✓<br>Tests</button>
+ <button onclick="go('notes',this)">▤<br>Notes</button>
+ <button onclick="go('profile',this)">◉<br>Student</button>
+</nav>
+<script>
+const classes=Array.from({length:7},(_,i)=>i+6);
+const subjects=[['📐','Mathematics'],['⚡','Physics'],['🧪','Chemistry'],['🧬','Biology'],['📖','English'],['🌍','Social Science'],['🧠','Reasoning'],['🏆','Olympiad']];
+const lessons=['Introduction to the chapter','Important definitions and concepts','Practice questions'];
+function fillSelect(id){document.getElementById(id).innerHTML=classes.map(c=>`<option value="${c}">Class ${c}</option>`).join('')}
+fillSelect('classSelect');fillSelect('studentClass');
+document.getElementById('classGrid').innerHTML=classes.map(c=>`<div class="panel tile" onclick="chooseClass(${c})"><div class="emoji">🎓</div><b>Class ${c}</b><small class="muted">View learning resources</small></div>`).join('');
+document.getElementById('subjectGrid').innerHTML=subjects.map(s=>`<div class="panel tile" onclick="showLessons('${s[1]}')"><div class="emoji">${s[0]}</div><b>${s[1]}</b><small class="muted">Open subject</small></div>`).join('');
+document.getElementById('lessonList').innerHTML='<div class="panel"><b>Select a subject</b><p class="muted">Sample lesson titles will appear here.</p></div>';
+function go(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');else{let idx={home:0,courses:1,tests:2,notes:3,profile:4}[id];document.querySelectorAll('nav button')[idx].classList.add('active')}window.scrollTo(0,0)}
+function chooseClass(c){document.getElementById('classSelect').value=c;go('courses')}
+function showLessons(subject){document.getElementById('lessonList').innerHTML=`<div class="panel"><div class="row"><b>${subject}</b><span class="badge">Class ${document.getElementById('classSelect').value}</span></div>${lessons.map((l,i)=>`<div class="lesson"><div><b>${l}</b><div class="muted">${subject} • Lesson ${i+1}</div></div><span class="badge">Planned</span></div>`).join('')}</div>`}
+function answer(btn,correct){document.querySelectorAll('.option').forEach(b=>b.style.borderColor='');btn.style.borderColor=correct?'#1a9b62':'#d34d4d';let f=document.getElementById('feedback');f.style.color=correct?'#168451':'#c13d3d';f.innerText=correct?'Correct! A barometer measures atmospheric pressure.':'Not quite. Try again. A barometer measures atmospheric pressure.'}
+function resetQuiz(){document.querySelectorAll('.option').forEach(b=>b.style.borderColor='');document.getElementById('feedback').innerText=''}
+function savePrefs(){localStorage.setItem('ah_class',document.getElementById('studentClass').value);localStorage.setItem('ah_board',document.getElementById('studentBoard').value);document.getElementById('saved').innerText='Preferences saved on this device.'}
+function doSearch(){let q=document.getElementById('search').value.trim().toLowerCase();if(!q)return;go('courses');let found=subjects.find(s=>s[1].toLowerCase().includes(q));if(found)showLessons(found[1]);else document.getElementById('lessonList').innerHTML=`<div class="panel muted">No matching subject found for “${q}”. Try Physics, Mathematics, English or Olympiad.</div>`}
+let savedClass=localStorage.getItem('ah_class'),savedBoard=localStorage.getItem('ah_board');if(savedClass)document.getElementById('studentClass').value=savedClass;if(savedBoard)document.getElementById('studentBoard').value=savedBoard;
+</script></body></html>
