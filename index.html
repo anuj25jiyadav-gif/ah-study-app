@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AH Study | Education</title>
+<style>
+:root{--blue:#2858c7;--navy:#14234b;--ink:#17233d;--muted:#6e7890;--line:#e6ebf4}
+*{box-sizing:border-box}body{margin:0;background:#f5f7fc;color:var(--ink);font-family:Arial,sans-serif}
+header{background:linear-gradient(135deg,#101b3c,#2858c7);color:white;padding:18px 16px 22px;border-radius:0 0 22px 22px}
+.wrap{max-width:900px;margin:auto}.brandrow{display:flex;align-items:center;gap:11px}.logo{width:45px;height:45px;border-radius:14px;background:white;color:#204ba9;display:grid;place-items:center;font-weight:900}.brand{font-size:22px;font-weight:800}.tag{font-size:11px;letter-spacing:1px;opacity:.8;margin-top:3px}
+.search{display:flex;gap:7px;margin-top:17px}.search input{flex:1;min-width:0;border:0;border-radius:10px;padding:12px}.btn{border:0;border-radius:10px;background:var(--blue);color:white;padding:11px 14px;font-weight:700;cursor:pointer}
+main{max-width:900px;margin:auto;padding:19px 15px 90px}.page{display:none}.page.active{display:block}h1{font-size:22px;margin:4px 0 7px}.muted{color:var(--muted);font-size:13px;line-height:1.5}.head{font-weight:800;font-size:17px;margin:21px 0 11px}
+.panel{background:white;border:1px solid var(--line);border-radius:15px;padding:15px;box-shadow:0 4px 15px #14234b08}.hero{background:#edf3ff;border:1px solid #dce7ff;border-radius:15px;padding:16px;margin:15px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{cursor:pointer}.emoji{font-size:24px}.tile b{display:block;margin:7px 0 4px}.tile small{color:var(--muted)}
+select,input{font:inherit}select{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff;margin:6px 0 12px}label{font-size:13px;font-weight:700}
+.lesson{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:9px 0}.lesson .btn{font-size:12px;white-space:nowrap;padding:9px 11px}.badge{font-size:11px;color:#2452b2;background:#edf3ff;padding:5px 8px;border-radius:20px}
+.note-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.note-actions button{font-size:12px}.quiz-option{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);padding:11px;border-radius:9px;margin:7px 0;cursor:pointer}
+.notice{background:#fff8e8;border:1px solid #f2e4bc;border-radius:11px;padding:12px;color:#76591c;font-size:12px;margin-top:15px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 2px calc(10px + env(safe-area-inset-bottom));z-index:4}nav button{border:0;background:none;color:#748099;font-size:11px;font-weight:700;cursor:pointer}nav button.active{color:var(--blue)}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#111827">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+</head>
+<body>
+<header><div class="wrap"><div class="brandrow"><div class="logo">AH</div><div><div class="brand">AH Study</div><div class="tag">LEARN • PRACTICE • ACHIEVE</div></div></div>
+<div class="search"><input id="search" placeholder="Search a subject or chapter"><button class="btn" onclick="searchTopic()">Search</button></div></div></header>
+<main>
+<section class="page active" id="home"><h1>Welcome to AH Study</h1><p class="muted">Your education-only learning platform.</p>
+<div class="hero"><b>📘 Learn chapter by chapter</b><p class="muted">Choose a class, board and subject to find lessons, video searches and revision notes.</p><button class="btn" onclick="go('learn')">Start Learning</button></div>
+<div class="head">Choose your class</div><div class="grid" id="classTiles"></div>
+<div class="head">Study tools</div><div class="grid">
+<div class="panel tile" onclick="go('learn')"><div class="emoji">🎥</div><b>Video Lessons</b><small>Find educational lectures</small></div>
+<div class="panel tile" onclick="go('notes')"><div class="emoji">📄</div><b>Revision Notes</b><small>Read and download notes</small></div>
+<div class="panel tile" onclick="go('quiz')"><div class="emoji">📝</div><b>Practice Quiz</b><small>Test your knowledge</small></div>
+<div class="panel tile" onclick="go('learn')"><div class="emoji">🏆</div><b>Olympiad</b><small>NSO and IMO learning</small></div>
+</div></section>
+
+<section class="page" id="learn"><h1>Chapter Learning</h1><p class="muted">Select your board, class and subject.</p>
+<div class="panel"><label>Board</label><select id="board"><option>CBSE</option><option>ICSE</option><option>UP Board</option><option>Other Board</option></select><label>Class</label><select id="class"></select><label>Subject</label><select id="subject" onchange="renderChapters()"><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option><option>English</option><option>Social Science</option><option>Reasoning</option><option>Olympiad Science</option></select></div>
+<div class="head">Chapters and lessons</div><div id="chapters"></div>
+<div class="notice">Video button opens YouTube search results for the selected lesson. Choose a teacher or channel you trust. AH Study does not host or verify third-party videos yet.</div></section>
+
+<section class="page" id="notes"><h1>Revision Notes</h1><p class="muted">Short sample notes you can save for revision.</p>
+<div class="panel"><label>Choose topic</label><select id="noteTopic" onchange="renderNote()"><option value="force">Force and Pressure</option><option value="motion">Motion</option><option value="cells">Cell: Basic Unit of Life</option></select><div id="noteContent"></div><div class="note-actions"><button class="btn" onclick="downloadNote()">Download notes (.txt)</button><button class="btn" onclick="window.print()">Print / Save as PDF</button></div></div>
+<div class="notice">These are brief sample revision notes, not a replacement for your prescribed textbook or teacher's guidance.</div></section>
+
+<section class="page" id="quiz"><h1>Quick Science Quiz</h1><p class="muted">One sample question with instant feedback.</p><div class="panel"><span class="badge">SCIENCE • MCQ</span><p><b>Which instrument measures atmospheric pressure?</b></p><button class="quiz-option" onclick="check(this,false)">A. Thermometer</button><button class="quiz-option" onclick="check(this,true)">B. Barometer</button><button class="quiz-option" onclick="check(this,false)">C. Ammeter</button><button class="quiz-option" onclick="check(this,false)">D. Speedometer</button><p id="feedback" class="muted"></p><button class="btn" onclick="resetQuiz()">Try again</button></div></section>
+
+<section class="page" id="student"><h1>Student Preferences</h1><div class="panel"><label>Class</label><select id="prefClass"></select><label>Board</label><select id="prefBoard"><option>CBSE</option><option>ICSE</option><option>UP Board</option><option>Other Board</option></select><button class="btn" onclick="savePrefs()">Save preferences</button><p id="saved" class="muted"></p></div><div class="head">About AH Study</div><div class="panel"><b>Education first.</b><p class="muted">Lessons, practice, revision and academic progress in one place.</p></div></section>
+</main>
+<nav><button class="active" onclick="go('home',this)">⌂<br>Home</button><button onclick="go('learn',this)">▦<br>Learn</button><button onclick="go('notes',this)">▤<br>Notes</button><button onclick="go('quiz',this)">✓<br>Quiz</button><button onclick="go('student',this)">◉<br>Student</button></nav>
+<script>
+const cls=Array.from({length:7},(_,i)=>i+6);
+const chapterData={
+'Physics':['Force and Pressure','Friction','Sound','Light','Electricity'],
+'Chemistry':['Matter and Its Nature','Atoms and Molecules','Chemical Reactions'],
+'Biology':['Cell: Basic Unit of Life','Microorganisms','Life Processes'],
+'Mathematics':['Number Systems','Algebra','Geometry','Mensuration'],
+'English':['Reading Comprehension','Grammar','Writing Skills'],
+'Social Science':['History','Geography','Civics','Economics'],
+'Reasoning':['Analogy','Series','Classification','Non-verbal Reasoning'],
+'Olympiad Science':['Motion and Force','Materials','Living World','Everyday Science']
+};
+const notes={
+force:{title:'Force and Pressure',body:'Force: A push or pull that can change or tend to change an object’s state of motion or shape.\\n\\nEffects of force: It can change speed, direction, or shape.\\n\\nPressure: Pressure is force acting per unit area. Formula: Pressure = Force ÷ Area.\\n\\nSI unit of pressure: pascal (Pa).\\n\\nRemember: For the same force, a smaller contact area produces greater pressure.'},
+motion:{title:'Motion',body:'Motion: An object is in motion when its position changes with time relative to a reference point.\\n\\nSpeed = Distance ÷ Time.\\n\\nSI unit of speed: metre per second (m/s).\\n\\nVelocity is speed in a specified direction.\\n\\nAn object at rest does not change its position relative to the chosen reference point.'},
+cells:{title:'Cell: Basic Unit of Life',body:'The cell is the basic structural and functional unit of living organisms.\\n\\nCell membrane: Controls movement of substances into and out of the cell.\\n\\nCytoplasm: Jelly-like material where many cell activities occur.\\n\\nNucleus: Contains genetic material and helps control cell activities.\\n\\nPlant cells usually have a cell wall and chloroplasts; animal cells do not have these structures.'}
+};
+function fill(id){document.getElementById(id).innerHTML=cls.map(n=>`<option value="${n}">Class ${n}</option>`).join('')}
+fill('class');fill('prefClass');
+document.getElementById('classTiles').innerHTML=cls.map(n=>`<div class="panel tile" onclick="document.getElementById('class').value=${n};go('learn')"><div class="emoji">🎓</div><b>Class ${n}</b><small>Explore study material</small></div>`).join('');
+function go(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');else{const ix={home:0,learn:1,notes:2,quiz:3,student:4}[id];document.querySelectorAll('nav button')[ix].classList.add('active')}window.scrollTo(0,0)}
+function renderChapters(){let s=document.getElementById('subject').value,c=document.getElementById('class').value;document.getElementById('chapters').innerHTML=(chapterData[s]||[]).map((ch,i)=>`<div class="panel lesson"><div><b>${i+1}. ${ch}</b><div class="muted">Class ${c} • ${s}</div></div><button class="btn" onclick="videoSearch('${ch}','${s}',${c})">Find video</button></div>`).join('')}
+function videoSearch(ch,s,c){let query=encodeURIComponent(`Class ${c} ${s} ${ch} lesson educational`);window.open('https://www.youtube.com/results?search_query='+query,'_blank','noopener')}
+function renderNote(){let n=notes[document.getElementById('noteTopic').value];document.getElementById('noteContent').innerHTML=`<h3>${n.title}</h3><p class="muted" style="white-space:pre-line">${n.body}</p>`}
+function downloadNote(){let n=notes[document.getElementById('noteTopic').value];let blob=new Blob([n.title+'\\n\\n'+n.body],{type:'text/plain;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=n.title.toLowerCase().replaceAll(' ','_')+'_notes.txt';a.click();URL.revokeObjectURL(a.href)}
+function check(btn,ok){document.querySelectorAll('.quiz-option').forEach(x=>x.style.borderColor='');btn.style.borderColor=ok?'#168451':'#c13d3d';document.getElementById('feedback').innerText=ok?'Correct! A barometer measures atmospheric pressure.':'Try again. Think of the instrument used to measure air pressure.'}
+function resetQuiz(){document.querySelectorAll('.quiz-option').forEach(x=>x.style.borderColor='');document.getElementById('feedback').innerText=''}
+function savePrefs(){localStorage.setItem('ah_class',document.getElementById('prefClass').value);localStorage.setItem('ah_board',document.getElementById('prefBoard').value);document.getElementById('saved').innerText='Preferences saved on this device.'}
+function searchTopic(){let q=document.getElementById('search').value.trim().toLowerCase();if(!q)return;go('learn');let subject=Object.keys(chapterData).find(s=>s.toLowerCase().includes(q)||chapterData[s].some(ch=>ch.toLowerCase().includes(q)));if(subject){document.getElementById('subject').value=subject;renderChapters()}else document.getElementById('chapters').innerHTML='<div class="panel muted">No matching subject or chapter found. Try Physics, Force, Motion, Biology or Mathematics.</div>'}
+document.getElementById('subject').addEventListener('change',renderChapters);renderChapters();renderNote();
+let pc=localStorage.getItem('ah_class'),pb=localStorage.getItem('ah_board');if(pc)document.getElementById('prefClass').value=pc;if(pb)document.getElementById('prefBoard').value=pb;
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  });
+}
+</script>
+
+</body></html>
