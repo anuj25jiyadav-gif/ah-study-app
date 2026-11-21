@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AH Study</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6fb;color:#172033;font-family:Arial,sans-serif}
+header{background:linear-gradient(135deg,#101b45,#2457c5);color:white;padding:22px 18px 28px;border-radius:0 0 24px 24px}
+.top{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:14px;background:#fff;color:#1946a5;display:grid;place-items:center;font-weight:900;font-size:16px}
+.brand{font-size:22px;font-weight:800}.tag{font-size:12px;opacity:.8;margin-top:3px}
+.search{margin-top:20px;display:flex;background:white;border-radius:13px;padding:5px}
+.search input{flex:1;min-width:0;border:0;outline:0;padding:12px;font-size:14px}.search button{border:0;border-radius:10px;background:#2457c5;color:#fff;padding:0 16px;font-weight:700}
+main{padding:20px 16px 90px;max-width:760px;margin:auto}.welcome{font-size:21px;font-weight:800;margin:4px 0}.sub{color:#68738a;font-size:13px;margin:7px 0 20px}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px;font-size:17px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.subject{background:white;border-radius:16px;padding:16px;box-shadow:0 4px 16px #1720330b;border:1px solid #e9edf5;cursor:pointer}
+.icon{font-size:25px}.subject b{display:block;margin-top:9px}.subject small{color:#78839a}
+.video{background:white;border-radius:16px;padding:12px;display:flex;gap:12px;margin:10px 0;align-items:center;box-shadow:0 4px 16px #1720330b}
+.thumb{width:104px;height:68px;border-radius:11px;background:linear-gradient(135deg,#dbeafe,#9db9f4);display:grid;place-items:center;font-size:25px;flex-shrink:0}
+.video b{font-size:14px}.video small{display:block;color:#78839a;margin-top:6px}
+.empty{display:none;color:#78839a;padding:15px;text-align:center}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8ebf2;display:flex;justify-content:space-around;padding:12px 5px calc(12px + env(safe-area-inset-bottom));}
+nav button{border:0;background:none;color:#65718a;font-size:12px;font-weight:700}nav button.active{color:#2457c5}
+.notice{background:#eaf1ff;color:#214a9b;border-radius:13px;padding:13px;font-size:13px;margin-top:18px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><div class="logo">AH</div><div><div class="brand">AH Study</div><div class="tag">LEARN • PRACTICE • GROW</div></div></div>
+  <div class="search"><input id="searchInput" placeholder="Search subjects or lessons..." aria-label="Search"><button onclick="searchItems()">Search</button></div>
+</header>
+<main>
+  <div class="welcome">Welcome to AH Study 👋</div>
+  <div class="sub">Your learning space. Choose a subject and start learning.</div>
+  <div class="section-title">Explore Subjects</div>
+  <div class="grid" id="subjects">
+    <div class="subject" data-search="physics"><div class="icon">⚡</div><b>Physics</b><small>Concepts & numericals</small></div>
+    <div class="subject" data-search="chemistry"><div class="icon">🧪</div><b>Chemistry</b><small>Learn reactions</small></div>
+    <div class="subject" data-search="biology"><div class="icon">🧬</div><b>Biology</b><small>Explore life science</small></div>
+    <div class="subject" data-search="mathematics maths"><div class="icon">📐</div><b>Mathematics</b><small>Practice problems</small></div>
+    <div class="subject" data-search="english"><div class="icon">📖</div><b>English</b><small>Grammar & literature</small></div>
+    <div class="subject" data-search="reasoning"><div class="icon">🧠</div><b>Reasoning</b><small>Sharpen your logic</small></div>
+    <div class="subject" data-search="sst social science"><div class="icon">🌍</div><b>Social Science</b><small>History, civics & more</small></div>
+    <div class="subject" data-search="olympiad nso imo"><div class="icon">🏆</div><b>Olympiad</b><small>NSO & IMO practice</small></div>
+  </div>
+  <div class="section-title">Popular Learning</div>
+  <div id="videos">
+    <div class="video" data-search="force and pressure physics"><div class="thumb">▶️</div><div><b>Force and Pressure</b><small>Physics • Concept lesson</small></div></div>
+    <div class="video" data-search="motion speed velocity physics"><div class="thumb">📘</div><div><b>Motion: Speed & Velocity</b><small>Physics • Basics</small></div></div>
+    <div class="video" data-search="mathematics algebra practice"><div class="thumb">➗</div><div><b>Algebra Practice</b><small>Mathematics • Practice</small></div></div>
+  </div>
+  <div class="empty" id="empty">No matching lessons found.</div>
+  <div class="notice">This is the first AH Study demo. Video lessons and login can be connected in the next version.</div>
+</main>
+<nav><button class="active" onclick="setTab(this)">⌂<br>Home</button><button onclick="setTab(this)">▦<br>Subjects</button><button onclick="setTab(this)">▶<br>Videos</button><button onclick="setTab(this)">◉<br>Profile</button></nav>
+<script>
+function searchItems(){
+ const q=document.getElementById('searchInput').value.trim().toLowerCase();
+ let count=0;
+ document.querySelectorAll('[data-search]').forEach(el=>{
+   const match=!q||el.dataset.search.includes(q)||el.innerText.toLowerCase().includes(q);
+   el.style.display=match?'':'none'; if(match)count++;
+ });
+ document.getElementById('empty').style.display=count?'none':'block';
+}
+document.getElementById('searchInput').addEventListener('input',searchItems);
+function setTab(btn){
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ const label=btn.innerText.replace(/\n/g,' ').trim();
+ if(label.includes('Subjects')) document.getElementById('subjects').scrollIntoView({behavior:'smooth'});
+ else if(label.includes('Videos')) document.getElementById('videos').scrollIntoView({behavior:'smooth'});
+ else if(label.includes('Home')) window.scrollTo({top:0,behavior:'smooth'});
+ else alert('Profile section will be added in the next version.');
+}
+</script>
+</body>
+</html>

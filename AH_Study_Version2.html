@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AH Study</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6fb;color:#172033;font-family:Arial,sans-serif}
+header{background:linear-gradient(135deg,#101b45,#2457c5);color:#fff;padding:20px 17px 25px;border-radius:0 0 24px 24px}
+.top{display:flex;align-items:center;gap:11px}.logo{width:45px;height:45px;border-radius:14px;background:#fff;color:#1946a5;display:grid;place-items:center;font-weight:900}.brand{font-size:22px;font-weight:800}.tag{font-size:11px;opacity:.8;margin-top:3px}
+.search{margin-top:18px;display:flex;background:#fff;border-radius:12px;padding:5px}.search input{flex:1;min-width:0;border:0;outline:0;padding:11px;font-size:14px}.search button,.primary{border:0;border-radius:9px;background:#2457c5;color:white;padding:11px 15px;font-weight:700}
+main{max-width:760px;margin:auto;padding:19px 15px 90px}.page{display:none}.page.active{display:block}.welcome{font-size:21px;font-weight:800}.muted{color:#758098;font-size:13px;margin:7px 0 18px}
+.title{font-size:17px;font-weight:800;margin:21px 0 12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.card{background:white;border:1px solid #e9edf5;border-radius:15px;padding:15px;box-shadow:0 4px 15px #17203309}.subject{cursor:pointer}.subject .icon{font-size:25px}.subject b{display:block;margin-top:8px}.subject small,.video small{display:block;color:#78839a;margin-top:5px}
+.video{display:flex;gap:12px;align-items:center;margin:10px 0;cursor:pointer}.thumb{width:100px;height:67px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,#dbeafe,#9db9f4);display:grid;place-items:center;font-size:25px}
+.notice{background:#eaf1ff;color:#214a9b;padding:13px;border-radius:12px;font-size:13px;margin-top:17px}
+input,select{font:inherit}.field{width:100%;padding:12px;border:1px solid #dce2ee;border-radius:10px;margin:7px 0 12px;background:white}.form{max-width:420px;margin:auto}.form label{font-size:13px;font-weight:700}.form .primary{width:100%;margin-top:5px}.profilebox{text-align:center;padding:25px}.avatar{margin:auto;width:75px;height:75px;border-radius:50%;background:#e5edff;color:#2457c5;display:grid;place-items:center;font-size:27px;font-weight:800}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #e8ebf2;display:flex;justify-content:space-around;padding:11px 4px calc(11px + env(safe-area-inset-bottom));z-index:4}nav button{border:0;background:none;color:#68748b;font-size:12px;font-weight:700}nav button.active{color:#2457c5}
+.modal{display:none;position:fixed;inset:0;background:#101b4577;z-index:5;align-items:center;justify-content:center;padding:18px}.modal.show{display:flex}.modalbox{background:white;border-radius:17px;padding:20px;width:100%;max-width:440px}.close{float:right;border:0;background:#edf1f8;border-radius:8px;padding:7px 10px}.player{aspect-ratio:16/9;background:#101b45;color:white;border-radius:12px;display:grid;place-items:center;text-align:center;padding:15px;margin:15px 0}
+@media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style></head>
+<body>
+<header><div class="top"><div class="logo">AH</div><div><div class="brand">AH Study</div><div class="tag">LEARN • PRACTICE • GROW</div></div></div>
+<div class="search"><input id="q" placeholder="Search subjects or lessons..."><button onclick="searchAll()">Search</button></div></header>
+<main>
+<section id="home" class="page active"><div class="welcome">Welcome to AH Study 👋</div><div class="muted">Your learning space. Choose a subject and start learning.</div>
+<div class="title">Explore Subjects</div><div class="grid" id="subjects">
+<div class="card subject" data-search="physics"><span class="icon">⚡</span><b>Physics</b><small>Concepts & numericals</small></div>
+<div class="card subject" data-search="chemistry"><span class="icon">🧪</span><b>Chemistry</b><small>Learn reactions</small></div>
+<div class="card subject" data-search="biology"><span class="icon">🧬</span><b>Biology</b><small>Explore life science</small></div>
+<div class="card subject" data-search="mathematics maths"><span class="icon">📐</span><b>Mathematics</b><small>Practice problems</small></div>
+<div class="card subject" data-search="english"><span class="icon">📖</span><b>English</b><small>Grammar & literature</small></div>
+<div class="card subject" data-search="reasoning"><span class="icon">🧠</span><b>Reasoning</b><small>Sharpen your logic</small></div>
+<div class="card subject" data-search="social science sst"><span class="icon">🌍</span><b>Social Science</b><small>History, civics & more</small></div>
+<div class="card subject" data-search="olympiad nso imo"><span class="icon">🏆</span><b>Olympiad</b><small>NSO & IMO practice</small></div></div>
+<div class="title">Popular Learning</div><div id="videos">
+<div class="card video" data-search="force pressure physics" onclick="openLesson('Force and Pressure','Physics • Concept lesson')"><div class="thumb">▶️</div><div><b>Force and Pressure</b><small>Physics • Concept lesson</small></div></div>
+<div class="card video" data-search="motion speed velocity physics" onclick="openLesson('Motion: Speed & Velocity','Physics • Basics')"><div class="thumb">▶️</div><div><b>Motion: Speed & Velocity</b><small>Physics • Basics</small></div></div>
+<div class="card video" data-search="algebra mathematics" onclick="openLesson('Algebra Practice','Mathematics • Practice')"><div class="thumb">▶️</div><div><b>Algebra Practice</b><small>Mathematics • Practice</small></div></div></div>
+<div id="empty" class="muted" style="display:none">No matching lessons found.</div>
+<div class="notice">Demo version: sign-in is saved only on this device. Real video hosting and secure accounts need a backend.</div></section>
+<section id="subjectsPage" class="page"><div class="welcome">All Subjects</div><p class="muted">Choose a subject to explore its lessons.</p><div class="grid" id="subjectList"></div></section>
+<section id="videoPage" class="page"><div class="welcome">Study Videos</div><p class="muted">Select a lesson to view its demo details.</p><div id="videoList"></div></section>
+<section id="profilePage" class="page"><div class="card profilebox"><div class="avatar" id="avatar">AH</div><h2 id="profileName">Guest Student</h2><p class="muted" id="profileEmail">Sign in to personalize your learning.</p><button class="primary" onclick="showAuth()">Login / Sign Up</button><button class="primary" id="logout" style="display:none;background:#667085;margin-left:6px" onclick="logout()">Log out</button></div></section>
+</main>
+<nav><button class="active" onclick="go('home',this)">⌂<br>Home</button><button onclick="go('subjectsPage',this)">▦<br>Subjects</button><button onclick="go('videoPage',this)">▶<br>Videos</button><button onclick="go('profilePage',this)">◉<br>Profile</button></nav>
+<div class="modal" id="lessonModal"><div class="modalbox"><button class="close" onclick="closeModal('lessonModal')">✕</button><h2 id="lessonTitle">Lesson</h2><p id="lessonSub" class="muted"></p><div class="player">▶<br>Video player will appear here<br><small>Connect your lesson video link to play it.</small></div><p class="muted">This is a demo lesson screen. No video has been uploaded yet.</p></div></div>
+<div class="modal" id="authModal"><div class="modalbox"><button class="close" onclick="closeModal('authModal')">✕</button><h2>Welcome to AH Study</h2><form class="form" onsubmit="login(event)"><label>Your name</label><input class="field" id="name" required placeholder="Enter your name"><label>Email (optional)</label><input class="field" id="email" type="email" placeholder="Enter email"><button class="primary">Continue</button></form><p class="muted">Demo only: this does not create a secure online account.</p></div></div>
+<script>
+const subjects=[['⚡','Physics','Concepts & numericals'],['🧪','Chemistry','Learn reactions'],['🧬','Biology','Explore life science'],['📐','Mathematics','Practice problems'],['📖','English','Grammar & literature'],['🧠','Reasoning','Sharpen your logic'],['🌍','Social Science','History, civics & more'],['🏆','Olympiad','NSO & IMO practice']];
+const lessons=[['Force and Pressure','Physics • Concept lesson'],['Motion: Speed & Velocity','Physics • Basics'],['Algebra Practice','Mathematics • Practice']];
+function go(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo(0,0)}
+function searchAll(){let q=document.getElementById('q').value.toLowerCase().trim(),n=0;document.querySelectorAll('[data-search]').forEach(el=>{let ok=!q||el.dataset.search.includes(q)||el.innerText.toLowerCase().includes(q);el.style.display=ok?'':'none';if(ok)n++});document.getElementById('empty').style.display=n?'none':'block'}
+document.getElementById('q').addEventListener('input',searchAll);
+function openLesson(t,s){document.getElementById('lessonTitle').innerText=t;document.getElementById('lessonSub').innerText=s;document.getElementById('lessonModal').classList.add('show')}
+function showAuth(){document.getElementById('authModal').classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function login(e){e.preventDefault();let n=document.getElementById('name').value.trim(),mail=document.getElementById('email').value.trim();localStorage.setItem('ah_name',n);localStorage.setItem('ah_email',mail);updateProfile();closeModal('authModal');}
+function updateProfile(){let n=localStorage.getItem('ah_name');document.getElementById('profileName').innerText=n||'Guest Student';document.getElementById('profileEmail').innerText=localStorage.getItem('ah_email')||'Signed in on this device';document.getElementById('avatar').innerText=n?n.slice(0,2).toUpperCase():'AH';document.getElementById('logout').style.display=n?'inline-block':'none'}
+function logout(){localStorage.removeItem('ah_name');localStorage.removeItem('ah_email');updateProfile()}
+function openLessonFromList(t,s){openLesson(t,s)}
+document.getElementById('subjectList').innerHTML=subjects.map(s=>`<div class="card subject"><span class="icon">${s[0]}</span><b>${s[1]}</b><small>${s[2]}</small></div>`).join('');
+document.getElementById('videoList').innerHTML=lessons.map(v=>`<div class="card video" onclick="openLessonFromList('${v[0]}','${v[1]}')"><div class="thumb">▶️</div><div><b>${v[0]}</b><small>${v[1]}</small></div></div>`).join('');
+updateProfile();
+</script></body></html>
